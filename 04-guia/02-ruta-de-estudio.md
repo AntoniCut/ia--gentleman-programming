@@ -43,6 +43,8 @@ No instales nada todavía. Ya tenés el 90% del stack funcionando.
 - [ ] Mirar qué hizo: ¿exploró antes de escribir? ¿te preguntó algo? ¿verificó?
 - [ ] Ahora repetir con un pedido que fuerce el flujo: una feature chica con specs claras
 - [ ] Ver el documento de feature que generó en `odd/tasks/`
+- [ ] Repetir el mismo pedido en Cursor y comparar: la regla global debería disparar el mismo ODD. Si no lo hace, revisá `07-cursor.md`
+- [ ] Leer `06-opencode.md` y `07-cursor.md` para el detalle de cada entorno
 
 ```bash
 cd 03-proyectos/mi-experimento
@@ -89,7 +91,7 @@ opencode
 
 - [ ] Entender el review: `gentle-ai review mode status`
 - [ ] Probar las 4 lentes en un cambio con riesgo real
-- [ ] Probar Judgment Day en un cambio que te dé miedo
+- [ ] Probar Judgment Day en un cambio que te dé miedo: en OpenCode pidiendo "hacé judgment day"; en Cursor con `/judgment-day`
 - [ ] Configurar Engram Cloud si querés memoria sincronizada
 - [ ] Usar `gga` como hook pre-commit
 

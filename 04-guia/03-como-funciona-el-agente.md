@@ -2,6 +2,8 @@
 
 Este capítulo explica qué pasa entre que escribís un pedido y ves el resultado. No hace falta memorizarlo, pero sin esto no se entiende por qué el agente a veces delega, a veces pregunta, y a veces hace todo solo.
 
+Está escrito sobre OpenCode, que es donde el modelo de agentes se ve completo. En Cursor la entrada es una regla global y los subagentes son otros; el detalle está en `07-cursor.md`.
+
 ## Los dos niveles
 
 Gentle-ai declara 14 agentes en tu configuración. Se dividen en dos clases:

@@ -11,16 +11,17 @@ Gentle AI no es un agente. Es una **capa de disciplina** que se instala encima d
 ```
 VOS
  └─ hablás con un RUNTIME (el agente)
-     ├─ OpenCode ........ el que usás hoy
+     ├─ OpenCode ........ tu entorno principal (cap. 06)
+     ├─ Cursor .......... tu segundo entorno (cap. 07)
      ├─ Claude Code ..... también instalado
      └─ Gentle Shell .... la TUI de Alan
           └─ Pi ......... harness minimalista sobre el que corre
 
 Sobre cualquier runtime, gentle-ai instala:
-   ├─ persona y reglas .... AGENTS.md
-   ├─ skills .............. ~/.config/opencode/skills/
-   ├─ subagentes .......... explore, worker, verify, review-*
-   └─ review (RDD) ........ 4 lentes + Judgment Day
+   ├─ persona y reglas .... AGENTS.md / regla de Cursor
+   ├─ skills .............. ~/.config/opencode/skills/ · ~/.cursor/skills/ · ~/.agents/skills/
+   ├─ subagentes .......... OpenCode: explore, worker, verify, review-* · Cursor: jd-*
+   └─ review (RDD) ........ 4 lentes en OpenCode + Judgment Day en los dos
 
 Herramientas satélite (funcionan aparte del runtime):
    ├─ Engram ....... memoria persistente entre sesiones
@@ -29,7 +30,7 @@ Herramientas satélite (funcionan aparte del runtime):
    └─ MCPs ......... Context7 (docs), Playwright (navegador)
 ```
 
-La clave: **gentle-ai es horizontal**. No reemplaza a OpenCode ni a Pi; los configura. Podés cambiar de runtime y llevarte todo el stack.
+La clave: **gentle-ai es horizontal**. No reemplaza a OpenCode, Cursor ni a Pi; los configura. Podés cambiar de runtime y llevarte casi todo el stack. La excepción importante: el review 4R con las lentes `review-*` vive en OpenCode. Cursor tiene Judgment Day y sus propios subagentes.
 
 ## Por qué te estás haciendo lío (es razonable)
 
@@ -48,7 +49,8 @@ Tres razones concretas, ninguna es culpa tuya:
 | **Gentle Shell** | El producto TUI: workspace agéntico. Antes se llamaba "Gentle Pi" | ❌ falta |
 | **gentle-pi** | Nombre viejo del producto Y nombre **actual** del paquete npm/repo | ❌ falta |
 | **Pi** | Harness minimalista (pi.dev). No es un modelo. Es el motor | ❌ falta |
-| **OpenCode** | Runtime de agente. El que usás hoy | ✅ instalado |
+| **OpenCode** | Runtime de agente. El entorno principal | ✅ instalado |
+| **Cursor** | Editor con Agent. El segundo entorno | ✅ instalado |
 | **ODD** | Organic-Driven Development: la metodología de trabajo | ✅ activa por defecto |
 | **RDD** | Receipt-Driven Development: el sistema de review por candidate | ✅ on por default |
 | **4R** | Las cuatro lentes de review: risk, resilience, readability, reliability | ✅ instaladas |
@@ -62,10 +64,27 @@ Tres razones concretas, ninguna es culpa tuya:
 | Capa | Qué incluye | ¿Requisito? |
 |---|---|---|
 | **1. Harness** | gentle-ai, skills, Engram, review, ODD | **Sí. Es el 90% del valor** |
-| **2. Editor** | Neovim / LazyVim / Gentleman.Dots | No. Elección personal de Alan |
+| **2. Editor / host** | OpenCode, Cursor, Neovim / LazyVim | No. Elección personal |
 | **3. Terminal** | Ghostty, tmux, zellij, rg, fzf | No. Ergonomía |
 
 Alan muestra las tres juntas en los videos, pero solo la primera cambia cómo trabaja el agente. Vos ya tenés la capa 1 completa y sana.
+
+## Tus dos runtimes
+
+Tenés el stack instalado en OpenCode y en Cursor. No son dos stacks: es el mismo, con dos puertas de entrada.
+
+| | OpenCode | Cursor |
+|---|---|---|
+| Entrada | `opencode` en la raíz del repo | Agent chat |
+| ODD | agente default `gentle-orchestrator` | regla `~/.cursor/rules/gentle-ai.mdc` |
+| Agentes propios | 2 primarios + 12 subagentes | 3 subagentes de Judgment Day |
+| Skills | tool `skill`, automáticas | menú `/`, automáticas |
+| Comandos | `/impeccable`, `/skill-creator`, `/skill-registry` | no hay propios; skills con `/` |
+| Review 4R | sí | no |
+| Judgment Day | sí | sí |
+| MCP | `~/.config/opencode/opencode.json` | `~/.cursor/mcp.json` |
+
+El detalle práctico de cada uno está en `06-opencode.md` y `07-cursor.md`. La regla para convivir: un agente por sesión, misma raíz de repo y la memoria de Engram como puente.
 
 ## Qué está pasando cuando usás OpenCode
 
@@ -79,3 +98,5 @@ escribís un pedido
 ```
 
 No tenés que memorizar esto. Es para que cuando veas "delegando a gentle-ai-worker" sepas qué está pasando y por qué.
+
+En Cursor el ciclo es el mismo, pero lo dispara la regla global y los subagentes son los nativos de Cursor. Si el Agent no clasifica, explora o verifica, lo primero es confirmar que la regla esté en contexto: el proyecto tiene que estar bajo tu home. El detalle está en `07-cursor.md`.

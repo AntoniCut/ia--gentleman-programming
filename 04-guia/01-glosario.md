@@ -7,10 +7,10 @@ Cada entrada dice si el término es **concepto**, **pieza instalada** o **pieza 
 ---
 
 **AGENTS.md**
-Archivo de instrucciones que el agente lee al arrancar. En `~/.config/opencode/AGENTS.md` está tu persona y las reglas del ecosistema. *Concepto — ya lo tenés.*
+Archivo de instrucciones que el agente lee al arrancar. En `~/.config/opencode/AGENTS.md` está tu persona y las reglas del ecosistema; en Cursor, la regla `~/.cursor/rules/gentle-ai.mdc` cumple ese papel. *Concepto — ya lo tenés.*
 
 **Agente (runtime)**
-El programa con el que hablás: OpenCode, Claude Code, Gentle Shell. Ejecuta el loop de pensar → usar herramienta → responder. *Concepto.*
+El programa con el que hablás: OpenCode, Cursor, Claude Code, Gentle Shell. Ejecuta el loop de pensar → usar herramienta → responder. *Concepto.*
 
 **Candidato (candidate)**
 La foto inmutable de un cambio que se manda a review: un commit o un slice de PR. El review nunca mira el working tree vivo, mira el candidato congelado. *Concepto — clave para entender RDD.*
