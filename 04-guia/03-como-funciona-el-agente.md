@@ -4,7 +4,7 @@ Este capítulo explica qué pasa entre que escribís un pedido y ves el resultad
 
 ## Los dos niveles
 
-En tu configuración hay 14 agentes declarados. Se dividen en dos clases:
+Gentle-ai declara 14 agentes en tu configuración. Se dividen en dos clases:
 
 | Clase | Quién | Qué hace |
 |---|---|---|
@@ -12,6 +12,57 @@ En tu configuración hay 14 agentes declarados. Se dividen en dos clases:
 | **Subagente** | Los otros 12 | Trabajan para el primario. No te hablan a vos |
 
 Vos siempre hablás con el primario. Los subagentes son invisibles salvo que mires qué está pasando.
+
+## Por qué con `Tab` ves 4 y no 14
+
+`Tab` cicla **solo agentes primarios**, y esa lista mezcla dos orígenes que no conviene confundir:
+
+```text
+gentle-ai declara .......... 14 agentes
+  primarios ................ 2   gentleman, gentle-orchestrator
+  subagentes ............... 12  explore, worker, verify, review-*, jd-*
+OpenCode suma (visibles) .... 2   build, plan
+                            ──
+visibles con Tab ........... 4
+```
+
+OpenCode además trae built-ins internos (`compaction`, `summary`, `title`) que no aparecen en el selector porque los usa el runtime, no vos.
+
+Los 12 subagentes no aparecen porque no se invocan a mano: los lanza el orquestador con la tool `task`, y en tu config esa tool está cerrada con allow explícito solo para esos 12.
+
+| Agente | Origen | Qué instrucciones carga | Para qué |
+|---|---|---|---|
+| `gentle-orchestrator` | gentle-ai | ODD completo, reglas de delegación y review | Trabajo real. Es el default (`default_agent`) |
+| `gentleman` | gentle-ai | `AGENTS.md` como prompt del agente | Charlar, discutir arquitectura, aprender |
+| `build` | OpenCode | `AGENTS.md` global, sin ODD | Cambio puntual que ya sabés hacer |
+| `plan` | OpenCode | Igual, con la edición de archivos denegada | Pensar un plan sin tocar código |
+
+Dos detalles que explican casi todas las dudas:
+
+**Los cuatro usan el mismo modelo.** Ningún agente declara `model` en la config: lo que cambia son las instrucciones y los permisos, no el cerebro.
+
+**Solo el orquestador tiene ODD.** Build, Plan y Gentleman no clasifican la tarea, no crean `odd/tasks/`, no delegan y no cierran con línea de riesgo. Si querés la disciplina, es el orquestador.
+
+## El detalle de Plan
+
+Plan viene de fábrica con la edición denegada, justamente para planear sin riesgo de que toque archivos. Pero ese default se aplica **antes** del permiso global y gana la última regla: un `"edit": "*": "allow"` global lo anula en silencio, sin avisar.
+
+En esta máquina está cerrado con un bloque explícito en `~/.config/opencode/opencode.json`:
+
+```json
+"agent": {
+  "plan": {
+    "permission": {
+      "bash": "ask",
+      "edit": "deny"
+    }
+  }
+}
+```
+
+Si algún día ves a Plan editando archivos, ese bloque desapareció.
+
+El costo de `bash: "ask"`: como gana la última regla, los `deny` específicos del permiso global (por ejemplo `git push --force*`) quedan en `ask` para Plan. Sigue pidiendo confirmación, pero ya no los bloquea solo.
 
 ## El ciclo de un pedido
 
